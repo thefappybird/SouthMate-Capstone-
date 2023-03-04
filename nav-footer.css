@@ -1,7 +1,8 @@
 /* navbar */
 header{
-    background-color: yellow;
+    background-color: #F7EE21;
     width: 100%;
+    
 }
 .logo img{
     width: 50px;
@@ -16,6 +17,7 @@ header{
 }
 .logoText{
     display: none;
+    color:#27235E;
 }
 /* navbar */
 .container{
@@ -69,6 +71,9 @@ header{
 .nav__item--btn{
     padding-top: 1rem;
 }
+.nav__link{
+    color:#27235E;
+}
 .nav__btn{
     color: white;
     background-color: #27235E;
@@ -81,7 +86,7 @@ header{
     background-color: #27235E;
     text-decoration: none;
     color:#B8B688;
-    padding: 2rem 5%;
+    padding: 2rem 10%;
     
 }
 .end--content-inner{
