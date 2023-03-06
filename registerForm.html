@@ -9,6 +9,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Tilt+Warp&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="nav-footer.css">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css" integrity="sha384-jLKHWM3JRmfMU0A5x5AkjWkw/EYfGUAGagvnfryNV3F9VqM98XiIH7VBGVoxVSc7" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/37530b2cc3.js" crossorigin="anonymous"></script>
     <title>Register your SouthMate Account</title>
 </head>
 <body>
@@ -44,33 +46,116 @@
             </nav>
         </div>
     </header>
-
-    <footer class="end--content flex">
-        <div class="end--content-inner">
-            <h2>Explore More About SouthMate</h2>
-            <h3>About SouthMate</h3>
-            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nemo eligendi ad similique quibusdam magni non dignissimos odit quod illo unde.</p>    
-        </div>
-        <div class="end--content-inner flex">
-            <div class="end--content-list-container">
-                <ul class="end--content-list">
-                    <h3>Explore Our Website</h3>
-                    <li class="end--content-list-inner"><a href="index.html" class="end--content-list-inner-link">Home</a></li>
-                    <li class="end--content-list-inner"><a href="about.html" class="end--content-list-inner-link">About</a></li>
-                    <li class="end--content-list-inner"><a href="register.html" class="end--content-list-inner-link">Register</a></li>
-                    <li class="end--content-list-inner"><a href="signIn.html" class="end--content-list-inner-link">Sign in</a></li>
-                    <li class="end--content-list-inner"><a href="download.html" class="end--content-list-inner-link">Download</a></li>
-                </ul>
+    <div class="register--form">
+        <div class="form--outer">
+            <div class="reg--title-prog--bar">
+                <h1 class="reg--title">SouthMate Register Form</h1>
+                <div class="progress-bar flex">
+                    <div class="step">
+                        <p>Basic</p>
+                        <div class="bullet">
+                            <span class="hide bullet-1">1</span>
+                        </div>
+                        <div class="check check-1 fas fa-check"></div>
+                    </div>
+                    <div class="step">
+                        <p>Contact</p>
+                        <div class="bullet ">
+                            <span class="bullet-2">2</span>
+                        </div>
+                        <div class="hide check check-2 fas fa-check"></div>
+                    </div>
+                    <div class="step">
+                        <p>Address</p>
+                        <div class="bullet">
+                            <span class="bullet-3">3</span>
+                        </div>
+                        <div class="hide check check-3 fas fa-check"></div>
+                    </div>
+                </div>
             </div>
-            <div class="end--content-list-container">
-                <ul class="end--content-list second-list">
-                    <h3>Additional Features</h3>
-                    <li class="end--content-list-inner"><a href="#" class="end--content-list-inner-link">To-do-list</a></li>
-                    <li class="end--content-list-inner"><a href="#" class="end--content-list-inner-link">Temporary ID Generator</a></li>
-                </ul>
-            </div>
+            <form action="#" class="reg--form flex">
+                <div class="form--inner slidepage-1">
+                    <div class="form--title">Basic information</div>
+                    <div class="input--field">
+                        <div class="label">First Name:</div>
+                        <input type="text" name="fname" class="regForm--text">
+                    </div>
+                    <div class="input--field">
+                        <div class="label">Middle Name:</div>
+                        <input type="text" name="mname" class="regForm--text">
+                    </div>
+                    <div class="input--field">
+                        <div class="label">Last Name:</div>
+                        <input type="text" name="lname" class="regForm--text">
+                    </div>
+                    <div class="input--field">
+                        <div class="label">Gender:</div>
+                        <select name="gender" class="gender--form">
+                            <option>Male</option>
+                            <option>Female</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    <div class="input--field flex">
+                        <button class="input--field-btn first--btn reg--btn next--step">Next</button>
+                    </div>
+                </div>
+                <div class="form--inner slidepage-2">
+                    <div class="form--title">Contact & Birth Information</div>
+                    <div class="input--field">
+                        <div class="label">Mobile Number:</div>
+                        <input type="number" name="mnumber" class="regForm--text">
+                    </div>
+                    <div class="input--field">
+                        <div class="label">Birth Date:</div>
+                        <input type="date" name="birthday">
+                    </div>
+                    <div class="input--field">
+                        <div class="label">Place of birth: </div>
+                        <input type="text" name="birthplace" class="regForm--text">
+                    </div>
+                    <div class="input--field">
+                        <div class="label">Citizenship:</div>
+                        <input type="text" name="citizenship" class="regForm--text">
+                    </div>
+                    <div class="input--field input--field-btn flex">
+                        <button class="input--field-btn reg--btn prev--step">Previous</button>
+                        <button class="input--field-btn reg--btn next--step">Next</button>
+                    </div>
+                </div>
+                <div class="form--inner">
+                    <div class="form--title">Address</div>
+                    <div class="input--field slidepage-3">
+                        <div class="label">House Address:</div>
+                        <input type="number" name="houseAddress" class="regForm--text">
+                    </div>
+                    <div class="input--field">
+                        <div class="label">Province:</div>
+                        <input type="text" name="province" class="regForm--text">
+                    </div>
+                    <div class="input--field">
+                        <div class="label">City/Municipality </div>
+                        <input type="text" name="birthplace" class="regForm--text">
+                    </div>
+                    <div class="input--field">
+                        <div class="label">Zip Code: </div>
+                        <input type="number" name="zipCode" class="regForm--text">
+                    </div>
+                    <div class="input--field input--field-btn flex">
+                        <button class="input--field-btn reg--btn prev--step">Previous</button>
+                        <button class="input--field-btn reg--btn submit--Btn">Submit</button>
+                    </div>
+                </div>
+            </form>
         </div>
-    </footer>
+    </div>
+    <div class="modal hide reg--modal flex">
+        <div class="reg--modal-content">
+            <a href="index.html" class="close fa-solid fa-circle-xmark"></a>
+            <p>You're all set up! <br>Thank you for Registering with SouthMate!</p>
+        </div>
+    </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
     <script src="index.js"></script>
 </body>
