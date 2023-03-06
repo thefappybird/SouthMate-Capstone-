@@ -5,3 +5,6 @@ SouthMate is an online banking service of some sorts that is exclusively used wi
 3-04-23
   1. Added landing page.
   2. Added About and Register landing page.
+
+3-07-23
+  1. Added Register Page with JS updates.
