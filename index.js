@@ -32,7 +32,7 @@ $(document).ready(function () {
         console.log(i);
     });
     $(".submit--Btn").click(function(){
-        $(".reg--modal").removeClass("hide--modal");
+        $(".reg--modal").removeClass("hide");
         i=0;
     });
 });
