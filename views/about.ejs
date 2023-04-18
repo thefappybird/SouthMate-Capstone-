@@ -1,0 +1,37 @@
+<%- include("partials/header") %>
+    <!-- main content -->
+
+    <div class="about flex">
+        <div class="about--main-content">
+            <h1>What is SouthMate?</h1>
+            <p>SouthMate is an online banking service that is aiming to be exclusively used within the University of Southern Philippines Foundation. The app is targeted at students at the university, only allowing users to register by using their uspf.edu email. </p>
+            <p>There are additional security measures taken to protect the money of the users, such as sending an OTP to the registered guardian before cashing out to outside banking or e-banking services, to make sure that purchases remain with the discretion of the parents' as well as the student's. </p>
+            <p>SouthMate is planning to be deployed as the exclusive e-banking application within USPF, and envisions all transactions within school grounds are done within the app, including food transactions and book payments. Tuition and other miscellaneous payments should also be done within the application so as to make things more convenient.</p>
+            <p>We are planning to foster financial responsibility in students, allowing parents to feel confident about the overall safety of the money they leave in their children's hands. In this way, the child can make their early financial decisions, with the guidance of their parents.</p>
+        </div>
+        <div class="about--secondary-content">
+            <h1>The Founder</h1>
+            <img src="assets/founder-pic.svg" class="foundPic" alt="founder picture">
+            <p>Hi, I am Alexander Banaag III, I am currently a 4th year Computer Science Student studying at the University of Southern Philippines Foundation.</p>
+        </div>
+    </div>
+    <!-- signin modal -->
+    <div class="modal--signin hide modal flex">
+        <div class="signin--modal-content">
+            <a href="#" class="close fa-solid fa-circle-xmark"></a>
+            <div class="signin-form flex">
+                <img src="assets/Carousel--Logo.svg" alt="registration logo" class="signin-logo">
+                <form action="#" id="signin-form" class="signin-form">
+                    <label for="email" class="signin-content">Enter your USPF email</label>
+                    <input placeholder="your_email@uspf.edu.ph"type="text" name="signinEmail" id="email"class="inputText">
+                    <label for="email" class="signin-content">Enter your password</label>
+                    <input placeholder="Your password here" type="password" name="password" id="email"class="inputText">
+                </form>
+            </div>
+            <div class="signin-form signin-form--bottom">
+                <button type="submit" form="signin--form" class="signin--btn">Login</button>
+            </div>
+        </div>
+    </div>
+    <!-- end of main content -->
+<%- include("partials/footer") %>
