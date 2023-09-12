@@ -186,6 +186,7 @@ a{
 }
 .reg-email-main{
     max-width: 400px;
+    max-height: 600px;
     margin: 10%; 
     padding: 3rem 1.75rem;
     background-color: #968FFF;
@@ -296,7 +297,7 @@ a{
 }
 .progress-bar .step .check{
     position: absolute;
-    left: 37%;
+    left: 38%;
     top:72%;
 }
 .next-page{
@@ -451,7 +452,6 @@ a{
     .about{
         flex-direction: row;
     }
-    
 }
 @media(min-width: 1500px){
     .input--field-btn{
