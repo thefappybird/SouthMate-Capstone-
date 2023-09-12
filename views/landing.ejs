@@ -1,0 +1,66 @@
+<%- include("partials/loggedHeader.ejs") %>
+<div class="third--content landing-container flex">
+    <div class="landing--content flex">
+        <div class="landing--content-outer flex">
+            <div class="landing--content-inner flex">
+                <img src="assets/user_avatar.svg" class="user-avatar">
+                <div class="inner--content-text">
+                    <h1><%= user.name %></h1>
+                    <p>Student</p>
+                </div>
+            </div>
+            <div class="user-info flex">
+                <div class="balance">
+                    <h3>Account Balance</h3>
+                    <p>₱<%= user.balance %></p>
+                </div>
+                <div class="icons flex">
+                    <div class="sendIcon logged-icons flex">
+                        <a href="#">
+                            <img src="assets/send-icon.png">
+                        </a>
+                        <div>
+                            <p>Send</p>
+                        </div>
+                    </div>
+                    <div class="cashoutIcon logged-icons flex">
+                        <a href="#">
+                            <img src="assets/cashout-icon.png">
+                        </a>
+                        <div>
+                            <p>Cash Out</p>
+                        </div>
+                    </div>
+                    <div class="cashinIcon logged-icons flex">
+                        <a href="#">
+                            <img src="assets/cashin-icon.png">
+                        </a>
+                        <div>
+                            <p>Cash In</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class=" history flex">
+            <div class="history--content">
+                Transaction History
+            </div>
+        </div>
+    </div>
+    <div class="landing--content-sidebar flex">
+        <div class="landing--sidebar">
+            <h2>QR Code Scanner</h2>
+            <p>QR code scanners are placed within all of USPF's shops all the way from the Canteen and Bookstore, to University Bills and other official payments that require payment.</p>
+        </div>
+        <div class="landing--sidebar">
+            <h2>Check Your Balance</h2>
+            <p>Checking your school balance has never been easier! You are now able to check AND pay your balance right away with just a few taps and/or clicks!</p>
+        </div>
+        <div class="landing--sidebar">
+            <h2>Easier Payments</h2>
+            <p>You are now able to finally say goodbye to long lines at the cashier! Skip the hassle and just pay online! We will generate your online receipt to serve as proof of payment! </p>
+        </div>
+    </div>
+</div>
+<%- include("partials/foot.ejs") %>

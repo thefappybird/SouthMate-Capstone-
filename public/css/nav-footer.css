@@ -32,6 +32,8 @@ header{
 .toggle:hover,
 .nav__btn:focus,
 .nav__btn:hover, 
+.logout:hover,
+.logout:focus,
 .logo:focus, 
 .logo:hover  {
     opacity: .75;
@@ -63,6 +65,7 @@ header{
     list-style: none;
     margin: 0;
     padding-bottom: 1rem;
+    font-weight: bold;
 }
 .nav__item{
     align-self:flex-start;
@@ -71,7 +74,7 @@ header{
 .nav__item--btn{
     padding-top: 1rem;
 }
-.nav__link{
+.nav__link, .logout{
     color:#27235E;
 }
 .nav__btn{
@@ -79,6 +82,14 @@ header{
     background-color: #27235E;
     padding: 0.375rem 1.3rem;
     border-radius: 10rem;
+}
+.logout{
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    border:none;
+    background-color: transparent;
+    font-weight: bold;
+    font-size: 1rem;
 }
 /* footer */
 .end--content{
@@ -103,6 +114,7 @@ header{
 .end--content-list-inner-link{
     color:#B8B688;
 }
+
 @media(min-width:750px){
     .toggle{
         display:none;

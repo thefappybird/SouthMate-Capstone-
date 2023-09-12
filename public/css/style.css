@@ -216,16 +216,7 @@ a{
 }
 .inputText{
     width: 100%;
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 10rem;
-}
-.inputText::placeholder{
-    color:#27235E;
-    opacity: .75;
-}
-.inputText:focus::placeholder{
-    color: transparent;
+    text-align: center;
 }
 .reg--btn{
     background-color: #F7EE21;
@@ -234,6 +225,12 @@ a{
     border-radius: 10rem;
     font-size: 16px;
     font-weight: bold;
+}
+.reg--btn:active{
+    color: #27235E;
+}
+.submit--Btn-inactive{
+    opacity: 50%;
 }
 /* end of register landing page */
 /* register form start */
@@ -271,6 +268,9 @@ a{
     justify-content:space-evenly;
     gap: 1rem;
 }
+.next-page{
+    margin-left: -25%;
+}
 .step{
     max-width: 72px;
     width: 100%;
@@ -284,24 +284,19 @@ a{
 
 .bullet{
     position: relative;
-    height: 25px;
-    width: 25px;
+    height: 28px;
+    width: 28px;
     border: 2px solid #27235E;
     display: inline-block;
     border-radius: 50%;
 }
-.bullet span{
-    font-weight:bold;
-    position: absolute;
-    transform: translateX(-50%);
+.bullet-enlarge{
+    height: 34px;
+    width: 34px;
+    border: 3px solid black;
 }
-.progress-bar .step .check{
-    position: absolute;
-    left: 38%;
-    top:72%;
-}
-.next-page{
-    margin-left: -25%;
+.info{
+    padding-top:1px;
 }
 .form--inner{
     flex-direction: column;
@@ -406,6 +401,117 @@ a{
 .close:focus{
     opacity: 0.75;
 }
+
+/* logged in user CSS */
+.landing-container{
+    width: 100%;
+    flex-direction: column;
+}
+.landing--content{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.landing--content-outer{
+    border: 1px black solid;
+    padding: 1rem;
+    text-align: left;
+    background-color: #191FAD;
+    border-radius: 0.75rem;
+    flex-direction: column;
+}
+.landing--content-inner{
+    background-color:#F7EE21;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+.inner--content-text{
+    padding-left: 1rem;
+}
+.inner--content-text h1{
+    font-size: 1.5rem;
+    margin-top: 2px;
+    margin-bottom:0;
+}
+.inner--content-text p{
+    margin-top: 0;
+    font-weight: bold;
+}
+.user-avatar{
+    height: 5.5rem;
+    width: 5.5rem;
+    margin: 0;
+    border-radius: 10rem;
+    border: 2px black solid;
+}
+.balance{
+    padding-left: 0.5rem;
+}
+.balance h3{
+    margin-top: 5px;
+    font-size: 1.5rem;
+    margin-bottom: 0;
+}
+.balance p{
+    font-size: 1.3rem;
+    margin: 0;
+}
+.user-info{
+    /* align-items: center; */
+    color: white;
+    font-weight: bold;
+    justify-content:space-between;
+}
+.logged-icons{
+    flex-direction: column;
+    align-items: center;
+}
+.logged-icons+.logged-icons{
+    margin-left:0.5rem;
+}
+.logged-icons img{
+    height: 2.5rem;
+    width: 2.5rem;
+    padding: 0.4rem;
+    /* margin-left: 0.4rem; */
+}
+.cashoutIcon img{
+    height: 2.5rem;
+    width: 2.5rem;
+    padding-bottom: 0;
+    padding-top: 0.2rem;
+}
+.cashinIcon img{
+    margin: 0;
+    height: 2.5rem;
+    width: 2.5rem;
+    padding: 0;
+}
+.logged-icons p{
+
+    margin: 0;
+    text-align: center;
+}
+.history{
+    margin-top: 1.5rem;
+    border: 1px solid black;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+}
+.landing--content-sidebar{
+    flex-direction: column;
+    text-align: center;
+}
+.landing--sidebar{
+    border: black 1px solid;
+    border-radius: 1rem;
+}
+/* mobile responsive condition */
 @media(min-width:750px){
     /* content adjustments */
     .second--content-inner{
@@ -414,11 +520,20 @@ a{
     .third--content-img{
         max-width: 600px;
     }
-    .third--content-sidebar{
+    .third--content-sidebar,.landing--content-sidebar{
         flex-direction: row;
     }
     .third--content-rows+.third--content-rows, .logo{
         margin-left: 1rem;
+    }
+    .landing--content-sidebar{
+        margin-top: 1rem;
+    }
+    .landing--sidebar+.landing--sidebar{
+        margin-left: 0.25rem;
+    }
+    .history{
+        padding:1.5rem;
     }
 }
 @media(min-width: 1000px){
@@ -452,6 +567,63 @@ a{
     .about{
         flex-direction: row;
     }
+    .landing-container{
+        flex-direction: row;
+    }
+    .landing--content{
+        padding: 2.5rem;
+    }
+    .landing--content-sidebar{
+        margin-left: 4rem;
+        width: 40%;
+        padding: 0.5rem;
+        flex-direction: column;
+        max-width: 400px;
+    }
+    .landing--sidebar{
+        padding: 0.5rem;
+        margin-bottom: 2rem;
+    }
+    .balance{
+        padding-left: 1rem;
+    }
+    .balance h3{
+        margin-top: 5px;
+        font-size: 2rem;
+        margin-bottom: 0;
+    }
+    .balance p{
+        font-size: 1.5rem;
+        margin: 0;
+    }
+    .logged-icons{
+        flex-direction: column;
+    }
+    .logged-icons img{
+        height: 3.5rem;
+        width: 3.5rem;
+        padding: 0.4rem;
+        margin-left: 0.4rem;
+    }
+    .cashoutIcon img{
+        padding-bottom: 0;
+        padding-top: 0.2rem;
+    }
+    .cashinIcon img{
+        margin: 0;
+        height: 3.5rem;
+        width: 3.5rem;
+        padding: 0;
+    }
+    .logged-icons p{
+        margin: 0;
+        text-align: center;
+    }
+    .inner--content-text h1{
+        font-size: 2rem;
+        margin-top: 2px;
+        margin-bottom:0;
+    }
 }
 @media(min-width: 1500px){
     .input--field-btn{
@@ -465,3 +637,4 @@ a{
         margin-left: 0.5rem;
     }
 }
+
