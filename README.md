@@ -10,3 +10,8 @@ SouthMate is an online banking service of some sorts that is exclusively used wi
 
 4-18-23
   1. Ported from HTML/CSS to EJS.
+9-13-23
+  1. Added Backend CRUD functionality using MongoDB
+  2. Added models folder where all current and future database schemas will be added to.
+  3. Added LILO functionality
+  4. Landing page design 70% finished.
