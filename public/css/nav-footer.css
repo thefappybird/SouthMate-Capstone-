@@ -84,6 +84,9 @@ header{
     border-radius: 10rem;
 }
 .logout{
+    padding-left: 0;
+}
+.logout{
     font-family: 'Open Sans', sans-serif;
     font-weight: 400;
     border:none;

@@ -6,10 +6,11 @@ const crypto = require("crypto");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const userRoute = require("./models/userModel");
+const transactionRoute = require("./models/transactionModel");
 const mongoose = require('mongoose');
 const session = require("express-session");
+const cors = require("cors");
 const app = express();
-
 
 const secretKey = crypto.randomBytes(64).toString("hex");
 app.use(
@@ -17,6 +18,7 @@ app.use(
         secret: secretKey, // Replace with a secure secret key
         resave: false,
         saveUninitialized: true,
+        cookie: {secure: false},
     })
 );
 //env
@@ -24,7 +26,7 @@ const PORT = process.env.PORT;
 const MONGO_URL = process.env.MONGO_URL;
 
 app.set('view engine', 'ejs');
-
+app.use(cors());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.urlencoded({extended: false}));
 app.use(express.static("public"));
@@ -60,8 +62,25 @@ app.get("/registerForm", function(req,res){
         title: "Register to SouthMate"
     });
 });
-
-
+app.get("/cashin", isAuthenticated, async (req,res)=>{
+    const banks = await userRoute.find({type: "bank"});
+    res.render("cashin",{
+        title: "SouthMate - Cash In",
+        banks: banks
+    });
+})
+app.get("/sendMoney", isAuthenticated, async(req,res)=>{
+    res.render("sendMoney",{
+        title: "SouthMate - Send Money"
+    })
+})
+app.get("/cashout", isAuthenticated, async(req,res)=>{
+    const banks = await userRoute.find({type: "bank"});
+    res.render("cashout",{
+        title: "SouthMate - Cash Out",
+        banks: banks
+    })
+})
 //login route
 app.post("/", async(req,res) => {
     const {email, password} = req.body;
@@ -80,13 +99,181 @@ app.post("/", async(req,res) => {
     }
 });
 //end of login route
-app.get("/landing", isAuthenticated, (req,res) => { 
+app.get("/landing", isAuthenticated, async (req,res) => { 
     const user = req.session.user;
+    const transactions = await transactionRoute.find({ $or:[{sender:user._id},{receiver: user._id}]}).sort({date: -1});
     res.render("landing",{
         title: "Welcome to SouthMate!",
-        user: user
+        user: user,
+        transactions: transactions
     });
 });
+//transaction routes
+app.post("/cashin", async (req, res) => {
+
+    const params = new URLSearchParams({
+      secret: "6LcwmB8oAAAAANcVmFrYW39ec-ZEIDk_1JOUNaDC",
+      response: req.body['g-recaptcha-response'],
+      remoteip: req.ip,
+    });
+    try {
+      const captchaRes = await fetch("https://www.google.com/recaptcha/api/siteverify", {
+        method: "POST",
+        body: params,
+      });
+        const data = await captchaRes.json();
+        if (data.success) {
+            const { cashinAmount, bank } = req.body;
+            const filter = { email: req.session.user.email }; // Assuming you use email as a unique identifier
+            // Use findOne with async/await
+            const user = await userRoute.findOne(filter);
+            if (!user) {
+                // Handle the case where the user is not found
+                res.json({ captchaSuccess: false, error: "User not found" });
+                return;
+            }
+            const bankUser = await userRoute.findById(bank);
+            if(!bankUser){
+                res.json({captchaSuccess: false, message:"Bank not Found"});
+                return;
+            }
+            if(bankUser.balance < cashinAmount){
+                res.json({captchaSuccess: false, message: 'Insufficient funds from bank'});
+                return;
+            }
+            bankUser.balance -= cashinAmount;
+            await bankUser.save();
+            // Update the user's balance
+            user.balance += parseFloat(cashinAmount);
+            // Save the updated user document
+            const updatedUser = await user.save();
+            req.session.user = updatedUser; // Update the session user
+            const transaction = new transactionRoute({
+                sender: bankUser._id,
+                receiver: user._id,
+                amount: cashinAmount,
+                description: "Cash In",
+            });
+            await transaction.save();
+            res.json({ captchaSuccess: true });
+        } else {
+            res.json({ captchaSuccess: false });
+        }
+    } catch (error) {
+        console.error(error);
+        res.json({ captchaSuccess: false, error: "Server error" });
+    }
+});
+app.post("/cashout", async (req, res) => {
+
+    const params = new URLSearchParams({
+      secret: "6LcwmB8oAAAAANcVmFrYW39ec-ZEIDk_1JOUNaDC",
+      response: req.body['g-recaptcha-response'],
+      remoteip: req.ip,
+    });
+    try {
+      const captchaRes = await fetch("https://www.google.com/recaptcha/api/siteverify", {
+        method: "POST",
+        body: params,
+      });
+        const data = await captchaRes.json();
+        if (data.success) {
+            const { cashoutAmount, bank } = req.body;
+            const filter = { email: req.session.user.email }; // Assuming you use email as a unique identifier
+            // Use findOne with async/await
+            const user = await userRoute.findOne(filter);
+            if (!user) {
+                // Handle the case where the user is not found
+                res.json({ captchaSuccess: false, error: "User not found" });
+                return;
+            }
+            if(user.balance < cashoutAmount){
+                res.json({captchaSuccess: false, message: 'Insufficient funds from bank'});
+                return;
+            }
+            const bankUser = await userRoute.findById(bank);
+            if(!bankUser){
+                res.json({captchaSuccess: false, message:"Bank not Found"});
+                return;
+            }
+            bankUser.balance += cashoutAmount;
+            await bankUser.save();
+            // Update the user's balance
+            user.balance -= parseFloat(cashoutAmount);
+            // Save the updated user document
+            const updatedUser = await user.save();
+            req.session.user = updatedUser; // Update the session user
+            const transaction = new transactionRoute({
+                sender: user._id,
+                receiver: bankUser._id,
+                amount: cashoutAmount,
+                description: "Cash Out",
+            });
+            await transaction.save();
+            res.json({ captchaSuccess: true });
+        } else {
+            res.json({ captchaSuccess: false });
+        }
+    } catch (error) {
+        console.error(error);
+        res.json({ captchaSuccess: false, error: "Server error" });
+    }
+});
+app.post("/sendMoney", async (req, res) => {
+    const params = new URLSearchParams({
+      secret: "6LcwmB8oAAAAANcVmFrYW39ec-ZEIDk_1JOUNaDC",
+      response: req.body['g-recaptcha-response'],
+      remoteip: req.ip,
+    });
+    try {
+      const captchaRes = await fetch("https://www.google.com/recaptcha/api/siteverify", {
+        method: "POST",
+        body: params,
+      });
+        const data = await captchaRes.json();
+        if (data.success) {
+            const { sendAmount, recepient } = req.body;
+            const filter = { email: req.session.user.email }; // Assuming you use email as a unique identifier
+            // Use findOne with async/await
+            const user = await userRoute.findOne(filter);
+            if (!user) {
+                // Handle the case where the user is not found
+                res.json({ captchaSuccess: false, error: "User not found" });
+                return;
+            }
+            const recepientUser = await userRoute.findOne({email: recepient });
+            if(!recepientUser){
+                res.json({captchaSuccess: false, message:"User not Found"});
+                return;
+            }
+            if(user.balance < sendAmount){
+                res.json({captchaSuccess: false, message: 'Insufficient funds to send.'});
+                return;
+            }
+            // Update the user's balance
+            user.balance -= parseFloat(sendAmount);
+            // Save the updated user document
+            const updatedUser = await user.save();
+            req.session.user = updatedUser; // Update the session user
+            recepientUser.balance += parseFloat(sendAmount);
+            await recepientUser.save();
+            const transaction = new transactionRoute({
+                sender: user._id,
+                receiver: recepientUser._id,
+                amount: sendAmount,
+                description: "Send Money",
+            });
+            await transaction.save();
+            res.json({ captchaSuccess: true });
+        } else {
+            res.json({ captchaSuccess: false });
+        }
+    } catch (error) {
+        console.error(error);
+        res.json({ captchaSuccess: false, error: "Server error" });
+    }
+});
+
 //logout route
 app.post("/logout", isAuthenticated, (req, res) => {
     req.session.destroy((err) => {

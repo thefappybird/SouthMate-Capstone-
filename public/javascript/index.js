@@ -87,5 +87,45 @@ $(document).ready(function () {
         }
         defaultDisable();
     }
-    //end of password check and reg form
+    // end of password check and reg form
+    function captchaCheck(e, url){
+        e.preventDefault();
+        const captchaResponse = grecaptcha.getResponse();
+
+        if(!captchaResponse.length > 0){
+            throw new Error("Captcha not Complete");
+        }
+
+        const fd = new FormData(e.target);
+        const params = new URLSearchParams(fd);
+
+        fetch(url ,{
+            method: "POST",
+            body: params
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.captchaSuccess){
+                console.log("Validation Success");
+                window.location.href = "/landing"
+            }else{
+                console.error("Validation Failed");
+            }
+        })
+        .catch(err => console.error(err))
+    }
+
+    const cashin = $("#cashinForm");
+    $(cashin).submit(function (e) { 
+       captchaCheck(e, 'http://localhost:3000/cashin');
+    });
+    const cashout = $("#cashoutForm");
+    $(cashout).submit(function(e){
+        captchaCheck(e, 'http://localhost:3000/cashout')
+    })
+    const sendMoney = $("#sendForm");
+    $(sendMoney).submit(function (e) { 
+        captchaCheck(e, 'http://localhost:3000/sendMoney');
+     });
+    
 });
