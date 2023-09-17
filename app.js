@@ -110,7 +110,6 @@ app.get("/landing", isAuthenticated, async (req,res) => {
 });
 //transaction routes
 app.post("/cashin", async (req, res) => {
-
     const params = new URLSearchParams({
       secret: "6LcwmB8oAAAAANcVmFrYW39ec-ZEIDk_1JOUNaDC",
       response: req.body['g-recaptcha-response'],
@@ -141,7 +140,7 @@ app.post("/cashin", async (req, res) => {
                 res.json({captchaSuccess: false, message: 'Insufficient funds from bank'});
                 return;
             }
-            bankUser.balance -= cashinAmount;
+            bankUser.balance -= parseFloat(cashinAmount);
             await bankUser.save();
             // Update the user's balance
             user.balance += parseFloat(cashinAmount);
@@ -196,7 +195,7 @@ app.post("/cashout", async (req, res) => {
                 res.json({captchaSuccess: false, message:"Bank not Found"});
                 return;
             }
-            bankUser.balance += cashoutAmount;
+            bankUser.balance += parseFloat(cashoutAmount);
             await bankUser.save();
             // Update the user's balance
             user.balance -= parseFloat(cashoutAmount);
