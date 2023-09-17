@@ -15,3 +15,5 @@ SouthMate is an online banking service of some sorts that is exclusively used wi
   2. Added models folder where all current and future database schemas will be added to.
   3. Added LILO functionality
   4. Landing page design 70% finished.
+9-17-23
+  1. Added functionality and database for cash-in, out and send money.
