@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const userRoute = require("./models/userModel");
 const transactionRoute = require("./models/transactionModel");
+const bankRoute = require("./models/bankModel")
 const mongoose = require('mongoose');
 const session = require("express-session");
 const cors = require("cors");
@@ -31,6 +32,29 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.urlencoded({extended: false}));
 app.use(express.static("public"));
 app.use(express.json());
+
+const bankList = [
+    {
+        name: "UnionBank of the Philippines",
+        logo: "assets/UnionBank-img.png"
+    },
+    {
+        name: "Banco De Oro",
+        logo: "assets/BDO-img.png"
+    },
+    {
+        name: "ChinaBank",
+        logo: "assets/ChinaBank-img.png"
+    },
+    {
+        name: "Bank of the Philippine Islands",
+        logo: "assets/BPI-img.png"
+    },
+    {
+        name: "GCash",
+        logo: "assets/Gcash-img.png"
+    }
+]
 
 //middleware
 function isAuthenticated(req, res, next) {
@@ -62,8 +86,15 @@ app.get("/registerForm", function(req,res){
         title: "Register to SouthMate"
     });
 });
+app.get("/registerBank", isAuthenticated, async (req,res) =>{
+    res.render("registerBank", {
+        title: "SouthMate - Register Bank",
+        bankList: bankList
+    })
+})
 app.get("/cashin", isAuthenticated, async (req,res)=>{
-    const banks = await userRoute.find({type: "bank"});
+    const user = req.session.user;
+    const banks = await bankRoute.find({owner:user._id});
     res.render("cashin",{
         title: "SouthMate - Cash In",
         banks: banks
@@ -75,7 +106,8 @@ app.get("/sendMoney", isAuthenticated, async(req,res)=>{
     })
 })
 app.get("/cashout", isAuthenticated, async(req,res)=>{
-    const banks = await userRoute.find({type: "bank"});
+    const user = req.session.user;
+    const banks = await bankRoute.find({owner:user._id});
     res.render("cashout",{
         title: "SouthMate - Cash Out",
         banks: banks
@@ -122,16 +154,15 @@ app.post("/cashin", async (req, res) => {
       });
         const data = await captchaRes.json();
         if (data.success) {
-            const { cashinAmount, bank } = req.body;
-            const filter = { email: req.session.user.email }; // Assuming you use email as a unique identifier
-            // Use findOne with async/await
+            const { cashinAmount, bankOption } = req.body;
+            const filter = { email: req.session.user.email }; 
             const user = await userRoute.findOne(filter);
             if (!user) {
                 // Handle the case where the user is not found
                 res.json({ captchaSuccess: false, error: "User not found" });
                 return;
             }
-            const bankUser = await userRoute.findById(bank);
+            const bankUser = await bankRoute.findOne({bankName: bankOption});
             if(!bankUser){
                 res.json({captchaSuccess: false, message:"Bank not Found"});
                 return;
@@ -177,7 +208,7 @@ app.post("/cashout", async (req, res) => {
       });
         const data = await captchaRes.json();
         if (data.success) {
-            const { cashoutAmount, bank } = req.body;
+            const { cashoutAmount, bankOption } = req.body;
             const filter = { email: req.session.user.email }; // Assuming you use email as a unique identifier
             // Use findOne with async/await
             const user = await userRoute.findOne(filter);
@@ -187,10 +218,10 @@ app.post("/cashout", async (req, res) => {
                 return;
             }
             if(user.balance < cashoutAmount){
-                res.json({captchaSuccess: false, message: 'Insufficient funds from bank'});
+                res.json({captchaSuccess: false, message: 'Insufficient funds from account'});
                 return;
             }
-            const bankUser = await userRoute.findById(bank);
+            const bankUser = await bankRoute.findOne({bankName: bankOption});
             if(!bankUser){
                 res.json({captchaSuccess: false, message:"Bank not Found"});
                 return;
@@ -272,7 +303,50 @@ app.post("/sendMoney", async (req, res) => {
         res.json({ captchaSuccess: false, error: "Server error" });
     }
 });
-
+app.post("/registerBank", async (req, res) => {
+    const params = new URLSearchParams({
+      secret: "6LcwmB8oAAAAANcVmFrYW39ec-ZEIDk_1JOUNaDC",
+      response: req.body['g-recaptcha-response'],
+      remoteip: req.ip,
+    });
+    try {
+      const captchaRes = await fetch("https://www.google.com/recaptcha/api/siteverify", {
+        method: "POST",
+        body: params,
+      });
+        const data = await captchaRes.json();
+        if (data.success) {
+            const { accountNumber, bankOption } = req.body;
+            const filter = { email: req.session.user.email }; // Assuming you use email as a unique identifier
+            // Use findOne with async/await
+            const user = await userRoute.findOne(filter);
+            let image = "";
+            if (!user) {
+                // Handle the case where the user is not found
+                res.json({ captchaSuccess: false, error: "User not found" });
+                return;
+            }
+            bankList.forEach(bank => {
+                if(bank.name === bankOption){
+                    image = bank.logo;
+                }
+            })
+            const newBank = new bankRoute({
+                owner: user._id,
+                accountNumber: accountNumber,
+                bankName: bankOption,
+                image: image
+            })
+            await newBank.save();
+            res.json({ captchaSuccess: true });
+        } else {
+            res.json({ captchaSuccess: false });
+        }
+    } catch (error) {
+        console.error(error);
+        res.json({ captchaSuccess: false, error: "Server error" });
+    }
+});
 //logout route
 app.post("/logout", isAuthenticated, (req, res) => {
     req.session.destroy((err) => {
@@ -291,7 +365,6 @@ app.post("/registerForm", async(req,res) => {
         let userName = [fname,mname,lname].filter(Boolean).join(' ');
         newUser.name = userName;
         await newUser.save();
-        
     } catch (error) {
         console.log(error.message);
         res.status(500).send("Server error");

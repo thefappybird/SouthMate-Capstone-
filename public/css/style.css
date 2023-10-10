@@ -326,11 +326,9 @@ a{
     align-items: center;
     text-transform:uppercase;
     color:#27235E;
-}
-
-.input--field-btn{
     margin-top: auto;
 }
+
 .input--field-btn + .input--field-btn{
     margin-top: 0.5rem;
 }
@@ -473,12 +471,6 @@ a{
 .logged-icons+.logged-icons{
     margin-left:0.5rem;
 }
-.logged-icons img{
-    height: 2.5rem;
-    width: 2.5rem;
-    padding: 0.4rem;
-    /* margin-left: 0.4rem; */
-}
 .cashoutIcon img{
     height: 2.5rem;
     width: 2.5rem;
@@ -502,6 +494,12 @@ a{
 .cash--modal{
     padding-top: 20%;
 }
+.transaction--title{
+    font-size: 1.15rem;
+}
+.transaction--text{
+    margin: 0.6rem 0;
+}
 .history{
     margin-top: 1.5rem;
     border: 1px solid black;
@@ -510,14 +508,23 @@ a{
     margin-bottom: 0.5rem;
     flex-direction: column;
 }
-.history--list{
+.history--list-active{
     border: #27235E 1px solid;
     padding-left: 1rem;
     line-height: 0.3;
     background-color:rgba(212, 208, 255, 0.5);
+    display: none;
+}
+.history--list-active hr{
+    margin-right: 1rem;
+    border: 1px solid black;
 }
 .history--content{
     border-bottom: 1px solid black;
+    justify-content: space-between;
+}
+.history--content h2{
+    padding: 0 1rem;
 }
 .landing--content-sidebar{
     flex-direction: column;
@@ -527,8 +534,51 @@ a{
     border: black 1px solid;
     border-radius: 1rem;
 }
-
+.banks{
+    background-color: lightblue;
+    border-radius: 1rem;
+}
+.bankLogo{
+    height: 2rem;
+    width: 2rem;
+}
+.bank-radio{ 
+    padding-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.bank--list{
+    display: none;
+}
+.regBank{
+    margin: 20%;
+    max-width: 400px;
+    padding: 3rem 1.75rem;
+    background-color: #968FFF;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    height: 100%;
+    border-radius: 1rem;
+}
+.banks--button{
+    background-color: lightblue;
+    border-radius: 0.5rem;
+    padding: 0 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 2rem;
+}
+.banks--button h3{
+    margin:auto 0;
+}
+.noBanks {
+    margin: 0 auto;
+}
 /* mobile responsive condition */
+
 @media(min-width:750px){
     /* content adjustments */
     .second--content-inner{

@@ -10,7 +10,16 @@ $(document).ready(function () {
         location.reload();
     });
     //end of signin modal
-
+    $(".history--content").click(function() {
+        $(".activate").toggleClass("hide");
+        $(".activated").toggleClass("hide");
+        $(".history--list-active").slideToggle();
+    })
+    $("#showBank").click(function(){
+        $(".activateBanks").toggleClass("hide");
+        $(".activatedBanks").toggleClass("hide");
+        $(".bank--list").slideToggle();
+    })
     //register form js
     $(".submit--Btn").prop('disabled',true);
     var conf = 0;
@@ -126,6 +135,9 @@ $(document).ready(function () {
     const sendMoney = $("#sendForm");
     $(sendMoney).submit(function (e) { 
         captchaCheck(e, 'http://localhost:3000/sendMoney');
+    });
+    const regBank = $("#bankRegForm")
+    $(regBank).submit(function (e) { 
+        captchaCheck(e, 'http://localhost:3000/registerBank');
      });
-    
 });

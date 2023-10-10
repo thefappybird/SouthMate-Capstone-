@@ -17,7 +17,8 @@ const userSchema = mongoose.Schema(
         }, 
         birthDate: {
             type: Date,
-            required: true
+            required: true,
+            get:(date)=>date.toLocaledateString()
         },
         placeOfBirth: {
             type: String,
@@ -54,10 +55,6 @@ const userSchema = mongoose.Schema(
         balance:{
             type: Number,
             default: 0
-        },
-        type:{
-            type: String,
-            default: "User"
         }
     },
     {

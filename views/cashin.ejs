@@ -5,18 +5,35 @@
             <div class="reg--box reg--box-top flex">
                 <img src="assets/Carousel--Logo.svg" alt="transaction logo" class="reg-logo">
                 <form id = "cashinForm" >
-                    <label for="bank">Choose Bank to Cash-in</label><br>
-                    <select name="bank" id="bank">
-                        <% banks.forEach(bank => { %>
-                          <option value="<%= bank._id %>">💳<%= bank.name %></option>
-                        <% }); %>
-                      </select><br>
-                    <label for="cashinAmount">Amount:</label><br>
-                    <input type="number" name="cashinAmount" id="cashinAmount" required><br>
+                    <label for="bank" class="form--title transaction--title">Choose Bank to Cash-in</label><br>
+                    <div class = "banks">
+                      <div class="banks--button flex" id="showBank">
+                          <h3>Show Banks</h3>
+                          <h3 class="activateBanks">↓</h3>
+                          <h3 class="hide activatedBanks">↑</h3>
+                      </div>
+                      <div class="bank--list">
+                        <% if (banks.length > 0) { %>
+                          <% banks.forEach((bank, index) => { %>
+                            <label class="bank-radio flex" for="<%= `bankOption${index}` %>">
+                                <input type="radio" id="<%= `bankOption${index}` %>" name="bankOption" value="<%= bank.bankName %>" />
+                                <img src="<%= bank.image %>" alt="<%= bank.bankName %>" class="bankLogo"/>
+                                <span><%= bank.bankName %></span>
+                            </label>
+                          <% }); %>
+                          <% } else { %>
+                            <div class="bank-radio flex">
+                              <p class = "noBanks">No banks registered. <a href="/registerBank" class="noBanks--link">Register a bank</a></p>
+                            </div>
+                        <% } %>
+                          
+                      </div>
+                    </div>
+                    <input type="number" name="cashinAmount" class="regForm--text transaction--text" id="cashinAmount" required><br>
 
-                    <div class="g-recaptcha" data-sitekey="6LcwmB8oAAAAABJ97qxvYuqlO0PF6Wsq84V4o43C"></div>
+                    <div class="g-recaptcha transactionCaptcha" data-sitekey="6LcwmB8oAAAAABJ97qxvYuqlO0PF6Wsq84V4o43C"></div>
                     <br/>
-                    <input type="submit" value="Submit">
+                    <input type="submit" class="input--field-btn reg--btn" value="Submit">
                   </form>
             </div>
         </div>
