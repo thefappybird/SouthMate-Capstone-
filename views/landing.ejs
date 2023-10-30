@@ -62,6 +62,7 @@
                     <h3><%= transaction.description %></h3>
                     <h5>₱<%= transaction.amount.toFixed(2) %></h5>
                     <p><%= transaction.sender.name %></p>
+                    <p>Transaction ID: <%=transaction._id %></p>
                     <hr>
                 <% }); %>
             </div>

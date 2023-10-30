@@ -115,9 +115,9 @@ app.get("/cashout", isAuthenticated, async(req,res)=>{
 })
 //login route
 app.post("/", async(req,res) => {
-    const {email, password} = req.body;
+    const {idNumber, password} = req.body;
     try {
-        const user = await userRoute.findOne({email});
+        const user = await userRoute.findOne({idNumber});
         if(user && user.password === password){
             req.session.user = user;
             req.session.userAuthenticated = true;

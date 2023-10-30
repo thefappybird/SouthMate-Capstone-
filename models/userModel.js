@@ -8,17 +8,15 @@ const userSchema = mongoose.Schema(
             required: true
         },
         gender: {
-            type: String,
-            required: true
+            type: String
         },
         mNumber: {
             type: Number,
             required: true
         }, 
         birthDate: {
-            type: Date,
+            type: String,
             required: true,
-            get:(date)=>date.toLocaledateString()
         },
         placeOfBirth: {
             type: String,
@@ -52,16 +50,26 @@ const userSchema = mongoose.Schema(
             type: String,
             required: true
         },
+        idNumber: {
+            type: Number,
+            required: true,
+        },
         balance:{
             type: Number,
             default: 0
-        }
+        },
+        verified: {
+            type: Boolean,
+            default: false
+        },
+        verificationToken: String,
     },
     {
         timestamps: true
-    }
+    },
+    
 )
 
-const User = mongoose.model("Userdata", userSchema);
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;
