@@ -57,13 +57,13 @@ a{
     background-color: rgba(0, 0, 0, 0.5);
 }
 .slide-1{
-    background-image: url(../assets/uspfPic--1.png);
+    background-image: url(../assets/App-Assets/uspfPic--1.png);
 }
 .slide-2{
-    background-image: url(../assets/uspfPic--2.png);
+    background-image: url(../assets/App-Assets/uspfPic--2.png);
 }
 .slide-3{
-    background-image: url(../assets/uspfPic--3.png);
+    background-image: url(../assets/App-Assets/uspfPic--3.png);
 }
 .slide-content {
     max-width: 1200px;
@@ -213,26 +213,35 @@ a{
 }
 .reg--box-bottom{
     text-align: center;
-    padding-bottom: 0;
+    align-items: center;
+    flex-direction: column;
+    gap: 0.25rem;
 }
 .reg-content{
     margin-top: 1rem;
 }
+.signin-content{
+    font-weight: bold;
+    text-align: center;
+}
 .inputText{
     width: 100%;
+    border-radius: 5px;
+    height: 2rem;
     text-align: center;
 }
 .reg--btn{
+    text-decoration: none;
+    color: #27235E;
     background-color: #F7EE21;
-    padding: 0.5rem 3.5rem;
+    padding: 0.5rem 3rem;
     border: none;
+    width: 90%;
     border-radius: 10rem;
     font-size: 16px;
     font-weight: bold;
 }
-.reg--btn:active{
-    color: #27235E;
-}
+
 .submit--Btn-inactive{
     opacity: 50%;
 }
@@ -242,14 +251,13 @@ a{
 .register--form{
     display: flex;
     align-items: center;
-    justify-content: center;
     flex-direction: column;
     min-height: 100vh;
     font-size: 1rem;
 }
 
 .form--outer{
-    margin: 7.5% 0;
+    margin: 7% 0;
     max-width: 30%;
     min-width: 330px;
     text-align: left;
@@ -373,12 +381,18 @@ a{
     border: 1px solid #888;
     border-radius: 10px;
     width: 75%;
-    max-width: 450px;
+    max-width: 375px;
+}
+
+.otp--modal-content{
+    display: flex;
+    flex-direction: column;
 }
 .signin-form,.money-form{
     flex-direction: column;
     width: 100%;
-    padding: 1.5rem 0;
+    padding: 1rem 0;
+    gap: 1rem;
 }
 .signin-logo{
     padding-bottom: 1.3rem;
@@ -391,7 +405,7 @@ a{
 .signin--btn,.money--btn{
     background-color: #F7EE21;
     padding: 0.5rem 3.5rem;
-    border: none;
+    border: 1px black solid;
     border-radius: 10rem;
     font-size: 16px;
     font-weight: bold;
@@ -473,7 +487,7 @@ a{
     align-items: center;
 }
 .logged-icons+.logged-icons{
-    margin-left:0.5rem;
+    margin-left:1.5rem;
 }
 .cashoutIcon img{
     height: 2.5rem;
@@ -551,6 +565,13 @@ a{
     display: flex;
     align-items: center;
     cursor: pointer;
+    gap: 5px;
+}
+.radioStyle{
+    flex-direction: column;
+}
+.bankText {
+    font-weight: bold;
 }
 .bank--list{
     display: none;

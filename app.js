@@ -11,6 +11,8 @@ const bankRoute = require("./models/bankModel")
 const mongoose = require('mongoose');
 const session = require("express-session");
 const cors = require("cors");
+const nodemailer = require("nodemailer");
+const otpGenerator = require("otp-generator");
 const app = express();
 
 const secretKey = crypto.randomBytes(64).toString("hex");
@@ -25,6 +27,7 @@ app.use(
 //env
 const PORT = process.env.PORT;
 const MONGO_URL = process.env.MONGO_URL;
+const EMAIL_PASS = process.env.EMAIL_PASS;
 
 app.set('view engine', 'ejs');
 app.use(cors());
@@ -36,23 +39,23 @@ app.use(express.json());
 const bankList = [
     {
         name: "UnionBank of the Philippines",
-        logo: "assets/UnionBank-img.png"
+        logo: "assets/App-Assets/UnionBank-img.png"
     },
     {
         name: "Banco De Oro",
-        logo: "assets/BDO-img.png"
+        logo: "assets/App-Assets/BDO-img.png"
     },
     {
         name: "ChinaBank",
-        logo: "assets/ChinaBank-img.png"
+        logo: "assets/App-Assets/ChinaBank-img.png"
     },
     {
         name: "Bank of the Philippine Islands",
-        logo: "assets/BPI-img.png"
+        logo: "assets/App-Assets/BPI-img.png"
     },
     {
         name: "GCash",
-        logo: "assets/Gcash-img.png"
+        logo: "assets/App-Assets/Gcash-img.png"
     }
 ]
 
@@ -82,8 +85,10 @@ app.get("/register", function(req,res){
     });
 });
 app.get("/registerForm", function(req,res){
+    const registrationType = req.query.type;
     res.render("registerForm",{
-        title: "Register to SouthMate"
+        title: "Register to SouthMate",
+        type: registrationType
     });
 });
 app.get("/registerBank", isAuthenticated, async (req,res) =>{
@@ -115,9 +120,9 @@ app.get("/cashout", isAuthenticated, async(req,res)=>{
 })
 //login route
 app.post("/", async(req,res) => {
-    const {idNumber, password} = req.body;
+    const {email, password} = req.body;
     try {
-        const user = await userRoute.findOne({idNumber});
+        const user = await userRoute.findOne({email});
         if(user && user.password === password){
             req.session.user = user;
             req.session.userAuthenticated = true;
@@ -140,6 +145,8 @@ app.get("/landing", isAuthenticated, async (req,res) => {
         transactions: transactions
     });
 });
+let lastOtpTimestamp = 0;
+let lastOtp = "";
 //transaction routes
 app.post("/cashin", async (req, res) => {
     const params = new URLSearchParams({
@@ -171,6 +178,7 @@ app.post("/cashin", async (req, res) => {
                 res.json({captchaSuccess: false, message: 'Insufficient funds from bank'});
                 return;
             }
+            
             bankUser.balance -= parseFloat(cashinAmount);
             await bankUser.save();
             // Update the user's balance
@@ -178,13 +186,18 @@ app.post("/cashin", async (req, res) => {
             // Save the updated user document
             const updatedUser = await user.save();
             req.session.user = updatedUser; // Update the session user
-            const transaction = new transactionRoute({
+            const newTransaction = new transactionRoute({
                 sender: bankUser._id,
+                senderName: bankUser.bankName,
                 receiver: user._id,
+                receiverName: user.name,
                 amount: cashinAmount,
                 description: "Cash In",
             });
-            await transaction.save();
+            sendReceiptEmail(user, newTransaction);
+            await newTransaction.save();
+            lastOtpTimestamp = 0;
+            lastOtp = "";
             res.json({ captchaSuccess: true });
         } else {
             res.json({ captchaSuccess: false });
@@ -233,13 +246,18 @@ app.post("/cashout", async (req, res) => {
             // Save the updated user document
             const updatedUser = await user.save();
             req.session.user = updatedUser; // Update the session user
-            const transaction = new transactionRoute({
+            const newTransaction = new transactionRoute({
                 sender: user._id,
+                senderName: user.name,
                 receiver: bankUser._id,
+                receiverName: bankUser.bankName,
                 amount: cashoutAmount,
                 description: "Cash Out",
             });
-            await transaction.save();
+            sendReceiptEmail(user, newTransaction);
+            await newTransaction.save();
+            lastOtpTimestamp = 0;
+            lastOtp = "";
             res.json({ captchaSuccess: true });
         } else {
             res.json({ captchaSuccess: false });
@@ -287,13 +305,18 @@ app.post("/sendMoney", async (req, res) => {
             req.session.user = updatedUser; // Update the session user
             recepientUser.balance += parseFloat(sendAmount);
             await recepientUser.save();
-            const transaction = new transactionRoute({
+            const newTransaction = new transactionRoute({
                 sender: user._id,
+                senderName: user.name,
                 receiver: recepientUser._id,
+                receiverName: recepientUser.name,
                 amount: sendAmount,
                 description: "Send Money",
             });
-            await transaction.save();
+            sendReceiptEmail(user, newTransaction);
+            await newTransaction.save();
+            lastOtpTimestamp = 0;
+            lastOtp = "";
             res.json({ captchaSuccess: true });
         } else {
             res.json({ captchaSuccess: false });
@@ -338,6 +361,8 @@ app.post("/registerBank", async (req, res) => {
                 image: image
             })
             await newBank.save();
+            lastOtpTimestamp = 0;
+            lastOtp = "";
             res.json({ captchaSuccess: true });
         } else {
             res.json({ captchaSuccess: false });
@@ -347,6 +372,28 @@ app.post("/registerBank", async (req, res) => {
         res.json({ captchaSuccess: false, error: "Server error" });
     }
 });
+
+app.post("/sendOtp", (req, res) => {
+    const transactionType = req.body.transType;
+    const user = req.session.user     
+    let email = user.email;
+    if(user.type === "Student"){
+       if(transactionType != "registerBank"){
+        email = user.guardianEmail
+       }
+    }
+    const currentTime = Date.now();
+    const timeDifference = currentTime - lastOtpTimestamp;
+    const fiveMinutes = 5 * 60 * 1000; // 5 minutes in milliseconds
+    if (timeDifference < fiveMinutes) {
+      return res.status(200).json({ success: true, otp: lastOtp });
+    }
+    const otp = otpGenerator.generate(6, { specialChars: false });
+    lastOtpTimestamp = currentTime;
+    lastOtp = otp;
+    sendVerificationEmail(email, otp, 1);
+    res.status(200).json({ success: true, otp });
+  });
 //logout route
 app.post("/logout", isAuthenticated, (req, res) => {
     req.session.destroy((err) => {
@@ -361,17 +408,91 @@ app.post("/logout", isAuthenticated, (req, res) => {
 app.post("/registerForm", async(req,res) => {
     try {
         const newUser = await userRoute.create(req.body);
-        const {fname, mname, lname} = req.body;
+        const {fname, mname, lname, type} = req.body;
         let userName = [fname,mname,lname].filter(Boolean).join(' ');
         newUser.name = userName;
+        newUser.type = type;
+        newUser.verificationToken = otpGenerator.generate(20);
         await newUser.save();
+        sendVerificationEmail(newUser.email, newUser.verificationToken, 0);
+        //save the  user to the database
     } catch (error) {
         console.log(error.message);
         res.status(500).send("Server error");
     }
 });
+app.get("/verify/:token", async (req, res) => {
+    try {
+      const token = req.params.token;
+  
+      const user = await userRoute.findOne({ verificationToken: token });
+      if (!user) {
+        return res.status(404).json({ message: "Invalid token" });
+      }
+      user.verified = true;
+      user.verificationToken = undefined;
+      await user.save();
+  
+      res.status(200).json({ message: "Email verified successfully" });
+    } catch (error) {
+      console.log("error getting token", error);
+      res.status(500).json({ message: "Email verification failed" });
+    }
+  });
 //routes end
+const sendVerificationEmail = async (email, verificationToken, method) => {
+    //create a nodemailer transporter
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "southmateofficial@gmail.com",
+        pass: EMAIL_PASS,
+      },
+    });
+  
+    //compose the email message
+    const mailOptions = [
+      {
+        from: "SouthMate.ph",
+        to: email,
+        subject: "Email Verification",
+        text: `Please click the following link to verify your email http://localhost:3001/verify/${verificationToken}`,
+      },
+      {
+        from: "SouthMate.ph",
+        to: email,
+        subject: "OTP Verification",
+        text: `This is your OTP: ${verificationToken}, this OTP lasts for 5 minutes.`,
+      },
+    ];
+  
+    try {
+      await transporter.sendMail(mailOptions[method]);
+    } catch (error) {
+      console.log("error sending email", error);
+    }
+  };
 
+  const sendReceiptEmail = async(details, transactionDetails) => {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "southmateofficial@gmail.com",
+        pass: EMAIL_PASS,
+      },
+    });
+    const mailOptions = {
+      from: "SouthMate.ph",
+      to: details.type !== 'Student' ? details.email : [details.email, details.guardianEmail],
+      subject: "Transaction Receipt",
+      text: `This is your transaction receipt for the following transaction\nid:${transactionDetails._id},\nTransaction: ${transactionDetails.description} \nFrom: ${transactionDetails.senderName} \nTo: ${transactionDetails.receiverName}\nAmount: ₱${transactionDetails.amount}`,
+    }
+    try {
+      await transporter.sendMail(mailOptions);
+    } catch (error) {
+      console.log("error sending email", error);
+    }
+  }
 mongoose.connect(MONGO_URL)
   .then(() => {
     console.log('Connected to MongoDB')

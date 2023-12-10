@@ -1,18 +1,20 @@
 <%- include("partials/head.ejs") %>
 <body>
     <div class="reg-email flex">
-        <div class="reg-email-main">
+        <div class="regBank">
             <div class="reg--box reg--box-top flex">
-                <img src="assets/Carousel--Logo.svg" alt="transaction logo" class="reg-logo">
-                <form id = "sendForm" >
+                <img src="assets/App-Assets/Carousel--Logo.svg" alt="transaction logo" class="reg-logo">
+                <form id = "sendForm" class="mainForm">
                     <label for="recepient" class="form--title transaction--title">Email of Recepient</label><br>
                     <input type="text" name="recepient" id="recepient" class="regForm--text transaction--text" required><br>
+                    <input type="hidden" id="transactionType" name="transactionType" value="sendMoney" />
                     <label for="sendAmount" class="form--title transaction--title">Amount:</label><br>
                     <input type="number" name="sendAmount" id="sendAmount" class="regForm--text transaction--text" required><br>
 
                     <div class="g-recaptcha transactionCaptcha" data-sitekey="6LcwmB8oAAAAABJ97qxvYuqlO0PF6Wsq84V4o43C"></div>
                     <br/>
-                    <input type="submit" class="input--field-btn reg--btn" value="Submit">
+                    <input type="button" id="generateOtp" class="input--field-btn reg--btn" value="Submit">
+                    <%- include("partials/otpModal.ejs") %>
                   </form>
             </div>
         </div>

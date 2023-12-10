@@ -3,10 +3,10 @@
     <div class="landing--content flex">
         <div class="landing--content-outer flex">
             <div class="landing--content-inner flex">
-                <img src="assets/user_avatar.svg" class="user-avatar">
+                <img src="assets/App-Assets/user_avatar.svg" class="user-avatar">
                 <div class="inner--content-text">
                     <h1><%= user.name %></h1>
-                    <p>Student</p>
+                    <p><%= user.type %></p>
                 </div>
             </div>
             <div class="user-info flex">
@@ -17,7 +17,7 @@
                 <div class="icons flex">
                     <div class="sendIcon logged-icons flex" id="sendIcon">
                         <a href="/sendMoney" class="sendMoney">
-                            <img src="assets/send-icon.png">
+                            <img src="assets/App-Assets/send-icon.png">
                             <div>
                                 <p>Send</p>
                             </div>
@@ -25,7 +25,7 @@
                     </div>
                     <div class="cashoutIcon logged-icons flex"id="cashoutIcon">
                         <a href="/cashout" class="cashout">
-                            <img src="assets/cashout-icon.png">
+                            <img src="assets/App-Assets/cashout-icon.png">
                         </a>
                         <div>
                             <p>Cash Out</p>
@@ -33,7 +33,7 @@
                     </div>
                     <div class="cashinIcon logged-icons flex"id="cashinIcon">
                         <a href="/cashin" class="cashin">
-                            <img src="assets/cashin-icon.png">
+                            <img src="assets/App-Assets/cashin-icon.png">
                         </a>
                         <div>
                             <p>Cash In</p>
@@ -41,7 +41,7 @@
                     </div>
                     <div class="registerBankIcon logged-icons flex" id="RegisterBankIcon">
                         <a href="/registerBank" class="registerBank">
-                            <img src="assets/bank-icon.png">
+                            <img src="assets/App-Assets/bank-icon.png">
                         </a>
                         <div>
                             <p>Bank Register</p>
@@ -57,11 +57,12 @@
                 <h2 class="hide activated">↑</h2>
             </button>
             <div class="history--list-active">
-                <% transactions.forEach(transaction => { %>
+                <% transactions.slice(0,5).forEach(transaction => { %>
                     <p><%= transaction.date.toDateString() %></p>
                     <h3><%= transaction.description %></h3>
-                    <h5>₱<%= transaction.amount.toFixed(2) %></h5>
-                    <p><%= transaction.sender.name %></p>
+                    <p>From: <%= transaction.senderName %></p>
+                    <p>To: <%= transaction.receiverName %></p>
+                    <h3>₱<%= transaction.amount.toFixed(2) %></h5>
                     <p>Transaction ID: <%=transaction._id %></p>
                     <hr>
                 <% }); %>

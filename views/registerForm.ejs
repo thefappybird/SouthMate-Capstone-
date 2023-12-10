@@ -38,6 +38,7 @@
                         <div class="label">First Name:</div>
                         <input type="text" name="fname" class="regForm--text">
                     </div>
+                    <input type="hidden" name="type" value="<%= type %>">
                     <div class="input--field">
                         <div class="label">Middle Name:</div>
                         <input type="text" name="mname" class="regForm--text">
@@ -88,12 +89,12 @@
                         <input type="text" name="houseAddress" class="regForm--text">
                     </div>
                     <div class="input--field">
-                        <div class="label">Province:</div>
-                        <input type="text" name="province" class="regForm--text">
-                    </div>
-                    <div class="input--field">
                         <div class="label">City/Municipality </div>
                         <input type="text" name="cityMuni" class="regForm--text">
+                    </div>
+                    <div class="input--field">
+                        <div class="label">Province:</div>
+                        <input type="text" name="province" class="regForm--text">
                     </div>
                     <div class="input--field">
                         <div class="label">Zip Code: </div>
@@ -110,6 +111,12 @@
                         <div class="label">Email Address:</div>
                         <input type="email" name="email" id ="email" class="regForm--text">
                     </div>
+                    <% if (type === 'Student') { %>
+                        <div class="input--field">
+                            <div class="label">Guardian Email</div>
+                            <input type="email" name="guardianEmail" id="guardianEmail" class="regForm--text">
+                        </div>
+                    <% } %>
                     <div class="input--field">
                         <div class="label">Id Number </div>
                         <input type="text" name="idNumber" class="regForm--text">
