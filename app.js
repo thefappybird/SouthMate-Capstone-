@@ -378,7 +378,7 @@ app.post("/sendOtp", (req, res) => {
     const user = req.session.user     
     let email = user.email;
     if(user.type === "Student"){
-       if(transactionType != "registerBank"){
+       if(transactionType != "registerBank" && transactionType != "sendMoney"){
         email = user.guardianEmail
        }
     }
@@ -412,7 +412,7 @@ app.post("/registerForm", async(req,res) => {
         let userName = [fname,mname,lname].filter(Boolean).join(' ');
         newUser.name = userName;
         newUser.type = type;
-        newUser.verificationToken = otpGenerator.generate(20);
+        newUser.verificationToken = otpGenerator.generate(20, {specialChars: false});
         await newUser.save();
         sendVerificationEmail(newUser.email, newUser.verificationToken, 0);
         //save the  user to the database
