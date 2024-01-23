@@ -16,6 +16,7 @@ Register
 Landing page(user)
 ![image25](https://github.com/thefappybird/SouthMate-Capstone-/assets/65710064/e054ffd6-6119-4045-b266-3ae33ac11801)
 Transactions(Cash-in/out, Register Banks, Send Money)
-![image2](https://github.com/thefappybird/SouthMate-Capstone-/assets/65710064/a01e7c74-97bc-4a40-ba34-4a32094bae6d)
+
+![image19](https://github.com/thefappybird/SouthMate-Capstone-/assets/65710064/b9fa1466-8e07-4c6f-bfde-bca7496ddc1f)
 ![image6](https://github.com/thefappybird/SouthMate-Capstone-/assets/65710064/e71ef454-1eaf-4e52-9927-fb847d03d47d)
 ![image10](https://github.com/thefappybird/SouthMate-Capstone-/assets/65710064/135bb5ec-ab66-4355-9870-d8974acd779c)
