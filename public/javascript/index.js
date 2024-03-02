@@ -83,7 +83,6 @@ $(document).ready(function () {
   function passwordMatch() {
     var passwordValue = $("#password").val();
     var confirmPass = $("#confirmPassword").val();
-
     if (passwordValue === confirmPass) {
       $(".passCon").removeClass("hide");
       $(".passConfirm ").addClass("hide");
