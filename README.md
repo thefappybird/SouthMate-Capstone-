@@ -1,6 +1,9 @@
 # SouthMate-Capstone-
-Hello, this is my Capstone Project on SouthMate.
-SouthMate is an online banking service of some sorts that is exclusively used within schools. In this project, I am focusing on creating the website with my school, USPF as the base. The app will include a Website and a (hopefully) functioning mobile app. 
+Hello, this is my Capstone Project on SouthMate. 
+
+The project has been successfully deployed using Render.com: https://southmate-capstone.onrender.com.
+
+SouthMate is an online banking service of some sorts that is exclusively used within schools. In this project, I am focusing on creating the website with my school, USPF as the base. The app will include a Website and a mobile app. 
 
 This is for the Website
 
