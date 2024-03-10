@@ -217,7 +217,7 @@ app.post("/cashin", async (req, res) => {
 });
 app.post("/cashout", async (req, res) => {
   const params = new URLSearchParams({
-    secret: "6LcwmB8oAAAAANcVmFrYW39ec-ZEIDk_1JOUNaDC",
+    secret: "6LflLSQoAAAAAFJbfo0gnlQVh5AEUlpcSXF-l2xV",
     response: req.body["g-recaptcha-response"],
     remoteip: req.ip,
   });
