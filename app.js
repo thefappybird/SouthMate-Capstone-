@@ -152,7 +152,7 @@ let lastOtp = "";
 //transaction routes
 app.post("/cashin", async (req, res) => {
   const params = new URLSearchParams({
-    secret: "6LflLSQoAAAAAFJbfo0gnlQVh5AEUlpcSXF-l2xV",
+    secret: "6LcwmB8oAAAAANcVmFrYW39ec-ZEIDk_1JOUNaDC",
     response: req.body["g-recaptcha-response"],
     remoteip: req.ip,
   });
@@ -217,7 +217,7 @@ app.post("/cashin", async (req, res) => {
 });
 app.post("/cashout", async (req, res) => {
   const params = new URLSearchParams({
-    secret: "6LflLSQoAAAAAFJbfo0gnlQVh5AEUlpcSXF-l2xV",
+    secret: "6LcwmB8oAAAAANcVmFrYW39ec-ZEIDk_1JOUNaDC",
     response: req.body["g-recaptcha-response"],
     remoteip: req.ip,
   });
