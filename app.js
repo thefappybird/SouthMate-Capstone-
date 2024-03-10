@@ -152,7 +152,7 @@ let lastOtp = "";
 //transaction routes
 app.post("/cashin", async (req, res) => {
   const params = new URLSearchParams({
-    secret: "6LcwmB8oAAAAANcVmFrYW39ec-ZEIDk_1JOUNaDC",
+    secret: "6LflLSQoAAAAAFJbfo0gnlQVh5AEUlpcSXF-l2xV",
     response: req.body["g-recaptcha-response"],
     remoteip: req.ip,
   });
@@ -480,7 +480,7 @@ const sendVerificationEmail = async (email, verificationToken, method) => {
       from: "SouthMate.ph",
       to: email,
       subject: "Email Verification",
-      text: `Please click the following link to verify your email http://localhost:3001/verify/${verificationToken}`,
+      text: `Please click the following link to verify your email https://southmate-capstone.onrender.com/verify/${verificationToken}`,
     },
     {
       from: "SouthMate.ph",
